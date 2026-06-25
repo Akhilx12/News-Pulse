@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Environment secrets
+.env
+.env.local
+
+# Node
+node_modules/
+.next/
+dist/
+build/
+
+# OS/editor cruft
+.DS_Store
+*.swp
