@@ -4,6 +4,16 @@ from extract_article import extract_full_text
 from cluster import cluster_new_articles, label_for_keywords
 import db
 
+#filtered known non article RSS entries like 'BBC News app' promotional stuff
+NON_ARTICLE_HEADLINES = {
+    "bbc news app",
+    "bbc world service",
+    #will add more as i find during testing
+}
+
+def is_real_article(normalized):
+    return normalized["headline"].strip().lower() not in NON_ARTICLE_HEADLINES
+
 def run_ingestion():
     #fetches all feeds, normalizes entries, extracts full text
     #and inserts unique articles into the database also it returns the count of newly inserted articles
@@ -16,6 +26,10 @@ def run_ingestion():
 
         if not normalized["url"]:
             print("[SKIP] Entry with no URL, cannot store")
+            continue
+
+        if not is_real_article(normalized):
+            print(f"[SKIP] Non article entry: {normalized['headline']}")
             continue
 
         if db.article_exists(normalized["url"]):
