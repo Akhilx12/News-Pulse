@@ -4,3 +4,4 @@ trafilatura
 psycopg2-binary
 python-dotenv
 lxml[html_clean]
+lxml_html_clean
