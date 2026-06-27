@@ -53,7 +53,8 @@ async function getTimeline() {
       c.label,
       MIN(a.published_at) AS start,
       MAX(a.published_at) AS end,
-      COUNT(a.id) AS article_count
+      COUNT(a.id) AS article_count,
+      ARRAY_AGG(DISTINCT a.source) AS sources
     FROM clusters c
     JOIN articles a ON a.cluster_id = c.id
     GROUP BY c.id, c.label
@@ -67,6 +68,7 @@ async function getTimeline() {
     end: row.end,
     articleCount: parseInt(row.article_count, 10),
     intensity: parseInt(row.article_count, 10),
+    sources: row.sources, //["BBC","NPR","Al Jazeera"]
   }));
 }
 
