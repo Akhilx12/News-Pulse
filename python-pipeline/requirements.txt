@@ -3,3 +3,4 @@ python-dateutil
 trafilatura
 psycopg2-binary
 python-dotenv
+lxml[html_clean]
