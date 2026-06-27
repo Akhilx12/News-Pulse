@@ -89,19 +89,42 @@ export default function Home() {
   if (error) return <main className="p-8 text-red-600">Error: {error}</main>;
 
   return (
-    <main className="p-8 max-w-6xl mx-auto">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">News Pulse</h1>
-        <RefreshButton onComplete={loadTimeline} />
+    <main className="site-container py-10">
+      <header className="mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 items-start gap-4">
+          <div className="pl-1 flex items-center gap-3">
+            <div>
+              <div className="text-lg font-semibold brand-title">News Pulse</div>
+            </div>
+          </div>
+
+          <div className="text-center">
+            <h1 className="text-4xl md:text-5xl hero-title">What is happening in the world</h1>
+            <p className="mt-2 hero-sub">RSS articles from BBC, NPR and Al Jazeera, grouped by topic and plotted across time.</p>
+          </div>
+
+          <div className="flex justify-end items-center gap-4">
+            <RefreshButton onComplete={loadTimeline} />
+            <div className="text-sm text-gray-500">{clusters.length} clusters</div>
+          </div>
+        </div>
+
+        <hr className="my-6 border-t border-gray-100" />
+      </header>
+
+      <div className="mb-6 flex justify-center">
+        <div className="w-full md:w-3/4">
+          <SourceFilter 
+            allSources={allSources}
+            activeSources={activeSources || new Set()}
+            onToggle={toggleSource}
+          />
+        </div>
       </div>
 
-      <SourceFilter 
-        allSources={allSources}
-        activeSources={activeSources || new Set()}
-        onToggle={toggleSource}
-      />
-
-      <Timeline clusters={visibleClusters} onClusterClick={handleClusterClick} />
+      <section className="card-surface p-6">
+        <Timeline clusters={visibleClusters} onClusterClick={handleClusterClick} />
+      </section>
 
       {selectedClusterId && (
         <ClusterDetail

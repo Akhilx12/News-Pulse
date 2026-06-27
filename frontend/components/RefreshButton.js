@@ -51,8 +51,8 @@ export default function RefreshButton({ onComplete }) {
       onClick={handleClick}
       disabled={status === "running"}
       className={`px-4 py-2 rounded-md font-medium text-white transition-colors ${
-        status === "failed" ? "bg-red-600" : "bg-blue-600 hover:bg-blue-700"
-      } disabled:opacity-60`}
+        status === "failed" ? "bg-red-600" : "bg-sky-600 hover:bg-sky-700"
+      } disabled:opacity-60 focus:outline-none focus:ring-2 focus:ring-sky-200`}
     >
       {labels[status]}
     </button>

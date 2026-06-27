@@ -2,7 +2,29 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #111827;
+}
+
+/* Design tokens */
+:root {
+  /* Palette */
+  --color-primary: #0ea5e9; /* vivid sky */
+  --color-primary-600: #0284c7;
+  --color-accent: #ef4444; /* alert */
+  --color-muted: #f8fafc; /* softer background */
+  --color-ink: #0f172a; /* deep ink */
+
+  /* Typography */
+  --font-size-base: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 28px;
+  --font-size-2xl: 36px;
+  --line-height-tight: 1.15;
+  --font-size-hero: 44px;
+
+  /* Radius / spacing */
+  --radius-md: 0.75rem;
+  --shadow-soft: 0 6px 18px rgba(15,23,42,0.06);
 }
 
 @theme inline {
@@ -12,15 +34,66 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Intentionally keep a light theme across the site (no automatic dark-mode overrides) */
+
+/* Global base styles for a cleaner, modern look */
+html, body, #__next {
+  height: 100%;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+/* Page container used by pages for nice centered layout */
+.site-container {
+  max-width: 96rem; /* matches max-w-6xl */
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.25rem; /* p-5 equivalent */
+  padding-right: 1.25rem;
+}
+
+/* Card surface used to subtly lift components */
+.card-surface {
+  background: linear-gradient(180deg, rgba(255,255,255,0.8), rgba(255,255,255,0.95));
+  border-radius: 0.75rem;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+}
+
+/* Keep card surfaces light-themed */
+
+/* Hero title tweaks */
+.hero-title { font-weight: 700; letter-spacing: -0.02em; }
+.hero-sub { color: #6b7280; }
+
+/* Button utility that uses the design token */
+.btn-primary {
+  background: var(--color-primary);
+  color: white;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+}
+.btn-primary:hover { background: var(--color-primary-600); }
+
+/* Hero responsive sizing */
+.hero-title { font-size: clamp(28px, 4.5vw, 44px); }
+
+/* Keep white surfaces crisp */
+body, .card-surface, .bg-white { background: var(--background); color: var(--color-ink); }
+
+/* Slightly stronger card shadow and consistent spacing */
+.card-surface { box-shadow: 0 8px 26px rgba(15, 23, 42, 0.06); border-radius: var(--radius-md); }
+
+/* Brand title (top-left) */
+.brand-title { font-weight: 700; color: var(--color-ink); }
+
+/* Subtle page rhythm */
+.site-container { padding-top: 1.5rem; padding-bottom: 2.5rem; }
+
+/* Improve card surface symmetry and spacing */
+.card-surface { padding: 1.5rem; margin-top: 0.75rem; margin-bottom: 1.5rem; }

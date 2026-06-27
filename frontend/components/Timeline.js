@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import {
   BarChart,
   Bar,
@@ -8,6 +9,8 @@ import {
   Tooltip,
   ResponsiveContainer,
   Cell,
+  LabelList,
+  CartesianGrid,
 } from "recharts";
 
 function toMillis(isoString) {
@@ -22,6 +25,7 @@ function formatDate(millis) {
 }
 
 export default function Timeline({ clusters, onClusterClick }) {
+  const [hoveredId, setHoveredId] = useState(null);
   if (clusters.length === 0) {
     return (
       <div className="text-gray-500 py-12 text-center">
@@ -58,6 +62,15 @@ export default function Timeline({ clusters, onClusterClick }) {
   const axisHeight = 40;
   const chartHeight = chartData.length * (barHeight + 6) + axisHeight;
 
+  // vibrant palette per source (fallbacks included)
+  const sourcePalette = {
+    BBC: ["#ef4444", "#dc2626"], // red
+    NPR: ["#06b6d4", "#0891b2"], // cyan
+    Guardian: ["#10b981", "#059669"], // green
+    "Al Jazeera": ["#f59e0b", "#d97706"], // amber
+    default: ["#60a5fa", "#2563eb"], // blue
+  };
+
   return (
     <div style={{ width: "100%", height: chartHeight }}>
       <ResponsiveContainer>
@@ -72,6 +85,8 @@ export default function Timeline({ clusters, onClusterClick }) {
             tickFormatter={(val) => formatDate(globalMin + val)}
             height={axisHeight}
             tick={{ fill: "#9ca3af", fontSize: 12 }}
+            axisLine={false}
+            tickLine={false}
           />
           <YAxis
             type="category"
@@ -79,6 +94,7 @@ export default function Timeline({ clusters, onClusterClick }) {
             width={140}
             tick={{ fontSize: 11 }}
           />
+          <CartesianGrid horizontal={false} stroke="#f3f4f6" />
           <Tooltip
             formatter={(value, name, props) => {
               if (name === "duration") {
@@ -95,17 +111,32 @@ export default function Timeline({ clusters, onClusterClick }) {
           <Bar
             dataKey="duration"
             stackId="a"
-            radius={[4, 4, 4, 4]}
+            radius={[6, 6, 6, 6]}
             onClick={(data) => onClusterClick(data.id)}
             cursor="pointer"
             minPointSize={3}
           >
-            {chartData.map((entry) => (
-              <Cell
-                key={entry.id}
-                fill={`hsl(220, 70%, ${Math.max(75 - entry.articleCount * 2, 35)}%)`}
-              />
-            ))}
+            {chartData.map((entry) => {
+              const primary = entry.sources && entry.sources.length > 0 ? entry.sources[0] : "default";
+              const colors = sourcePalette[primary] || sourcePalette.default;
+              const isHovered = hoveredId === entry.id;
+              const fill = isHovered ? colors[1] : colors[0];
+              return (
+                <Cell
+                  key={entry.id}
+                  fill={fill}
+                  style={{ transition: "fill 180ms" }}
+                  onMouseEnter={() => setHoveredId(entry.id)}
+                  onMouseLeave={() => setHoveredId(null)}
+                />
+              );
+            })}
+            <LabelList
+              dataKey="articleCount"
+              position="right"
+              formatter={(val) => `${val}`}
+              style={{ fontSize: 12, fill: "#6b7280" }}
+            />
           </Bar>
         </BarChart>
       </ResponsiveContainer>
