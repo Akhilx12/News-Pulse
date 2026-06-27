@@ -4,14 +4,13 @@ const { createJob, completeJob, failJob, getJob } = require("../jobs");
 
 function triggerIngestRoute(req, res) {
   const jobId = createJob();
-  
-  //path to python pipeline
+
   const pipelineDir = path.join(__dirname, "..", "..", "python-pipeline");
   const pipelineScript = "pipeline.py";
 
   const pythonCommand = process.env.PYTHON_COMMAND || "python";
-  const pythonProcess = spawn("python", [pipelineScript], {
-    cwd: pipelineDir, // run the process as if i'd `cd`'d into python-pipeline first
+  const pythonProcess = spawn(pythonCommand, [pipelineScript], {
+    cwd: pipelineDir,
   });
 
   let stderrOutput = "";
