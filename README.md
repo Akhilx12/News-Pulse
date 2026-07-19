@@ -52,6 +52,3 @@ All required endpoints implemented: `GET /clusters`, `GET /clusters/:id`, `GET /
 - Source filter uses "at least one matching source" visibility logic for multi-source clusters (a cluster stays visible if any of its sources are active, rather than requiring all). The cluster detail view applies the same active-source filter to its article list for consistency.
 
 - Refresh button polls `/ingest/status/:jobId` every 3 seconds and re-fetches the timeline automatically on completion.
-
-
-## Deployment
